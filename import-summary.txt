@@ -1,0 +1,65 @@
+ECLIPSE ANDROID PROJECT IMPORT SUMMARY
+======================================
+
+Ignored Files:
+--------------
+The following files were *not* copied into the new Gradle project; you
+should evaluate whether these are still needed in your project and if
+so manually move them:
+
+* README
+* ant.properties
+* build.xml
+* proguard.cfg
+
+Moved Files:
+------------
+Android Gradle projects use a different directory structure than ADT
+Eclipse projects. Here's how the projects were restructured:
+
+* AndroidManifest.xml => app\src\main\AndroidManifest.xml
+* libs\arm64-v8a\libAVAPIs.so => app\src\main\jniLibs\arm64-v8a\libAVAPIs.so
+* libs\arm64-v8a\libAVAPIsT.so => app\src\main\jniLibs\arm64-v8a\libAVAPIsT.so
+* libs\arm64-v8a\libIOTCAPIs.so => app\src\main\jniLibs\arm64-v8a\libIOTCAPIs.so
+* libs\arm64-v8a\libIOTCAPIsT.so => app\src\main\jniLibs\arm64-v8a\libIOTCAPIsT.so
+* libs\armeabi-v7a\libAVAPIs.so => app\src\main\jniLibs\armeabi-v7a\libAVAPIs.so
+* libs\armeabi-v7a\libAVAPIsT.so => app\src\main\jniLibs\armeabi-v7a\libAVAPIsT.so
+* libs\armeabi-v7a\libIOTCAPIs.so => app\src\main\jniLibs\armeabi-v7a\libIOTCAPIs.so
+* libs\armeabi-v7a\libIOTCAPIsT.so => app\src\main\jniLibs\armeabi-v7a\libIOTCAPIsT.so
+* libs\armeabi\libAVAPIs.so => app\src\main\jniLibs\armeabi\libAVAPIs.so
+* libs\armeabi\libAVAPIsT.so => app\src\main\jniLibs\armeabi\libAVAPIsT.so
+* libs\armeabi\libIOTCAPIs.so => app\src\main\jniLibs\armeabi\libIOTCAPIs.so
+* libs\armeabi\libIOTCAPIsT.so => app\src\main\jniLibs\armeabi\libIOTCAPIsT.so
+* libs\mips64\libAVAPIs.so => app\src\main\jniLibs\mips64\libAVAPIs.so
+* libs\mips64\libAVAPIsT.so => app\src\main\jniLibs\mips64\libAVAPIsT.so
+* libs\mips64\libIOTCAPIs.so => app\src\main\jniLibs\mips64\libIOTCAPIs.so
+* libs\mips64\libIOTCAPIsT.so => app\src\main\jniLibs\mips64\libIOTCAPIsT.so
+* libs\mips\libAVAPIs.so => app\src\main\jniLibs\mips\libAVAPIs.so
+* libs\mips\libAVAPIsT.so => app\src\main\jniLibs\mips\libAVAPIsT.so
+* libs\mips\libIOTCAPIs.so => app\src\main\jniLibs\mips\libIOTCAPIs.so
+* libs\mips\libIOTCAPIsT.so => app\src\main\jniLibs\mips\libIOTCAPIsT.so
+* libs\x86\libAVAPIs.so => app\src\main\jniLibs\x86\libAVAPIs.so
+* libs\x86\libAVAPIsT.so => app\src\main\jniLibs\x86\libAVAPIsT.so
+* libs\x86\libIOTCAPIs.so => app\src\main\jniLibs\x86\libIOTCAPIs.so
+* libs\x86\libIOTCAPIsT.so => app\src\main\jniLibs\x86\libIOTCAPIsT.so
+* libs\x86_64\libAVAPIs.so => app\src\main\jniLibs\x86_64\libAVAPIs.so
+* libs\x86_64\libAVAPIsT.so => app\src\main\jniLibs\x86_64\libAVAPIsT.so
+* libs\x86_64\libIOTCAPIs.so => app\src\main\jniLibs\x86_64\libIOTCAPIs.so
+* libs\x86_64\libIOTCAPIsT.so => app\src\main\jniLibs\x86_64\libIOTCAPIsT.so
+* res\ => app\src\main\res\
+* src\ => app\src\main\java\
+
+Next Steps:
+-----------
+You can now build the project. The Gradle project needs network
+connectivity to download dependencies.
+
+Bugs:
+-----
+If for some reason your project does not build, and you determine that
+it is due to a bug or limitation of the Eclipse to Gradle importer,
+please file a bug at http://b.android.com with category
+Component-Tools.
+
+(This import summary is for your information only, and can be deleted
+after import once you are satisfied with the results.)

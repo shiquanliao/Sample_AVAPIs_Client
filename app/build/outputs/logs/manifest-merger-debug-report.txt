@@ -1,0 +1,61 @@
+-- Merging decision tree log ---
+manifest
+ADDED from E:\ffmpeg\Sample_AVAPIs_Client\app\src\main\AndroidManifest.xml:2:1-17:12
+INJECTED from E:\ffmpeg\Sample_AVAPIs_Client\app\src\main\AndroidManifest.xml:2:1-17:12
+INJECTED from E:\ffmpeg\Sample_AVAPIs_Client\app\src\main\AndroidManifest.xml:2:1-17:12
+INJECTED from E:\ffmpeg\Sample_AVAPIs_Client\app\src\main\AndroidManifest.xml:2:1-17:12
+INJECTED from E:\ffmpeg\Sample_AVAPIs_Client\app\src\main\AndroidManifest.xml:2:1-17:12
+INJECTED from E:\ffmpeg\Sample_AVAPIs_Client\app\src\main\AndroidManifest.xml:2:1-17:12
+INJECTED from E:\ffmpeg\Sample_AVAPIs_Client\app\src\main\AndroidManifest.xml:2:1-17:12
+	package
+		ADDED from E:\ffmpeg\Sample_AVAPIs_Client\app\src\main\AndroidManifest.xml:3:7-38
+		INJECTED from E:\ffmpeg\Sample_AVAPIs_Client\app\src\main\AndroidManifest.xml
+		INJECTED from E:\ffmpeg\Sample_AVAPIs_Client\app\src\main\AndroidManifest.xml
+	android:versionName
+		ADDED from E:\ffmpeg\Sample_AVAPIs_Client\app\src\main\AndroidManifest.xml:5:7-32
+		INJECTED from E:\ffmpeg\Sample_AVAPIs_Client\app\src\main\AndroidManifest.xml
+		INJECTED from E:\ffmpeg\Sample_AVAPIs_Client\app\src\main\AndroidManifest.xml
+	xmlns:android
+		ADDED from E:\ffmpeg\Sample_AVAPIs_Client\app\src\main\AndroidManifest.xml:2:11-69
+	android:versionCode
+		ADDED from E:\ffmpeg\Sample_AVAPIs_Client\app\src\main\AndroidManifest.xml:4:7-30
+		INJECTED from E:\ffmpeg\Sample_AVAPIs_Client\app\src\main\AndroidManifest.xml
+		INJECTED from E:\ffmpeg\Sample_AVAPIs_Client\app\src\main\AndroidManifest.xml
+application
+ADDED from E:\ffmpeg\Sample_AVAPIs_Client\app\src\main\AndroidManifest.xml:6:5-14:19
+	android:label
+		ADDED from E:\ffmpeg\Sample_AVAPIs_Client\app\src\main\AndroidManifest.xml:6:18-50
+activity#com.tutk.sample.AVAPI.MainActivity
+ADDED from E:\ffmpeg\Sample_AVAPIs_Client\app\src\main\AndroidManifest.xml:7:9-13:20
+	android:label
+		ADDED from E:\ffmpeg\Sample_AVAPIs_Client\app\src\main\AndroidManifest.xml:8:19-51
+	android:name
+		ADDED from E:\ffmpeg\Sample_AVAPIs_Client\app\src\main\AndroidManifest.xml:7:19-46
+intent-filter#action:name:android.intent.action.MAIN+category:name:android.intent.category.LAUNCHER
+ADDED from E:\ffmpeg\Sample_AVAPIs_Client\app\src\main\AndroidManifest.xml:9:13-12:29
+action#android.intent.action.MAIN
+ADDED from E:\ffmpeg\Sample_AVAPIs_Client\app\src\main\AndroidManifest.xml:10:17-69
+	android:name
+		ADDED from E:\ffmpeg\Sample_AVAPIs_Client\app\src\main\AndroidManifest.xml:10:25-66
+category#android.intent.category.LAUNCHER
+ADDED from E:\ffmpeg\Sample_AVAPIs_Client\app\src\main\AndroidManifest.xml:11:17-77
+	android:name
+		ADDED from E:\ffmpeg\Sample_AVAPIs_Client\app\src\main\AndroidManifest.xml:11:27-74
+uses-permission#android.permission.INTERNET
+ADDED from E:\ffmpeg\Sample_AVAPIs_Client\app\src\main\AndroidManifest.xml:15:5-83
+	android:name
+		ADDED from E:\ffmpeg\Sample_AVAPIs_Client\app\src\main\AndroidManifest.xml:15:22-64
+uses-sdk
+ADDED from E:\ffmpeg\Sample_AVAPIs_Client\app\src\main\AndroidManifest.xml:16:5-42
+INJECTED from E:\ffmpeg\Sample_AVAPIs_Client\app\src\main\AndroidManifest.xml:16:5-42
+INJECTED from E:\ffmpeg\Sample_AVAPIs_Client\app\src\main\AndroidManifest.xml:16:5-42
+INJECTED from E:\ffmpeg\Sample_AVAPIs_Client\app\src\main\AndroidManifest.xml:16:5-42
+INJECTED from E:\ffmpeg\Sample_AVAPIs_Client\app\src\main\AndroidManifest.xml:16:5-42
+	android:targetSdkVersion
+		INJECTED from E:\ffmpeg\Sample_AVAPIs_Client\app\src\main\AndroidManifest.xml
+		ADDED from E:\ffmpeg\Sample_AVAPIs_Client\app\src\main\AndroidManifest.xml:16:5-42
+		INJECTED from E:\ffmpeg\Sample_AVAPIs_Client\app\src\main\AndroidManifest.xml
+	android:minSdkVersion
+		ADDED from E:\ffmpeg\Sample_AVAPIs_Client\app\src\main\AndroidManifest.xml:16:15-40
+		INJECTED from E:\ffmpeg\Sample_AVAPIs_Client\app\src\main\AndroidManifest.xml
+		INJECTED from E:\ffmpeg\Sample_AVAPIs_Client\app\src\main\AndroidManifest.xml
