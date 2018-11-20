@@ -1,18 +1,11 @@
 {
     "logs": [
         {
-            "outputFile": "E:\\ffmpeg\\Sample_AVAPIs_Client\\app\\build\\intermediates\\incremental\\mergeDebugResources\\merged.dir\\values\\values.xml",
+            "outputFile": "/Users/cvte/Desktop/FFMpegLearn/Sample_AVAPIs_Client/app/build/intermediates/incremental/mergeDebugResources/merged.dir/values/values.xml",
             "map": [
                 {
-                    "source": "E:\\ffmpeg\\Sample_AVAPIs_Client\\app\\src\\main\\res\\values\\strings.xml",
+                    "source": "/Users/cvte/Desktop/FFMpegLearn/Sample_AVAPIs_Client/app/src/main/res/values/strings.xml",
                     "from": {
-                        "startLines": "-1,3",
-                        "startColumns": "-1,4",
-                        "startOffsets": "-1,110",
-                        "endColumns": "-1,48",
-                        "endOffsets": "-1,154"
-                    },
-                    "to": {
                         "startLines": "2,3",
                         "startColumns": "4,4",
                         "startOffsets": "55,110",

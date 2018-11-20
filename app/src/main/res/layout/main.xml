@@ -5,11 +5,11 @@
     android:background="#FFF"
     android:orientation="vertical">
 
-    <SurfaceView
+    <com.common.view.XPlay
         android:id="@+id/surfaceView"
-        android:visibility="gone"
+        android:visibility="visible"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
+        android:layout_height="250dp" />
 
     <EditText
         android:id="@+id/edit_text"

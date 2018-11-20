@@ -1,13 +1,21 @@
 apply plugin: 'com.android.application'
-
 android {
-    compileSdkVersion 9
+    compileSdkVersion 26
     buildToolsVersion "27.0.3"
 
     defaultConfig {
         applicationId "com.tutk.sample.AVAPI"
-        minSdkVersion 9
-        targetSdkVersion 9
+        minSdkVersion 19
+        targetSdkVersion 26
+
+        externalNativeBuild {
+            cmake {
+                cppFlags "-std=c++11"
+            }
+            ndk {
+                abiFilters "armeabi-v7a"
+            }
+        }
     }
 
     buildTypes {
@@ -22,4 +30,16 @@ android {
             jniLibs.srcDirs = ['libs']
         }
     }
+    externalNativeBuild {
+        cmake {
+            path "CMakeLists.txt"
+        }
+    }
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+}
+
+dependencies {
 }

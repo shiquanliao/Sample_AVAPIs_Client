@@ -1,8 +1,11 @@
 package com.tutk.sample.AVAPI;
 
+import android.graphics.YuvImage;
 import android.os.Bundle;
 import android.os.Message;
+import android.util.Log;
 
+import com.common.jniFun.PlayControl;
 import com.tutk.IOTC.IOTCAPIs;
 import com.tutk.IOTC.AVAPIs;
 
@@ -182,6 +185,9 @@ public class Client {
 
                 // Now the data is ready in videoBuffer[0 ... ret - 1]
                 // Do something here
+                Log.e(TAG, "frameInfo is: "+ String.valueOf(frameInfo) );
+                PlayControl.setFrameData(videoBuffer,outBufSize[0],frameInfo);
+
             }
 
             System.out.printf("[%s] Exit\n",
