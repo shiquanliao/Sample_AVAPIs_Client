@@ -41,8 +41,12 @@ public:
 
     void SendMsgToJava(int code, const char *msg) override;
 
-    void setDemuxData(u_int8_t *data, int size, int pts) override;
+    void setDemuxVideoData(u_int8_t *data, int size, unsigned int pts) override;
 
+
+    void setDemuxAudioData(u_int8_t *data, int size, unsigned int pts) override;
+
+    void StartAudioPlay() override;
 
 protected:
     IPlayProxy() {};

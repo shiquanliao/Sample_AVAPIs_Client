@@ -60,7 +60,11 @@ public:
 
     virtual void SendMsgToJava(int code, const char *msg);
 
-    virtual void setDemuxData(u_int8_t *data, int size, int pts);
+    virtual void setDemuxVideoData(u_int8_t *data, int size, unsigned int pts);
+
+    virtual void setDemuxAudioData(u_int8_t *data, int size, unsigned int pts);
+
+    virtual void StartAudioPlay();
 
 
     //是否视频硬解码

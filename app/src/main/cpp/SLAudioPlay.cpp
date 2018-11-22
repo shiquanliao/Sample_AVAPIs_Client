@@ -129,6 +129,7 @@ bool SLAudioPlay::StartPlay(XParameter out) {
     Close();
 
     mutex.lock();
+    isExit = false;
     //1 创建引擎
     eng = CreateSL();
     if (eng) {
@@ -203,6 +204,7 @@ bool SLAudioPlay::StartPlay(XParameter out) {
     }
 
     //设置回调函数，播放队列空调用
+    // pcmQue -- 缓存队列, PcmCall -- 回调
     (*pcmQue)->RegisterCallback(pcmQue, PcmCall, this);
 
     //设置为播放状态

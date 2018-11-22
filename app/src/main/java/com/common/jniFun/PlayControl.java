@@ -1,5 +1,7 @@
 package com.common.jniFun;
 
+import com.tutk.sample.AVAPI.Client;
+
 /**
  * control Play
  */
@@ -8,6 +10,28 @@ public class PlayControl {
         System.loadLibrary("native-lib");
     }
 
+    private static PlayControl sPlayControl = null;
+
+    public static final int VIDEODATA = 0;
+    public static final int AUDIODATA = 1;
+
+
+    /**
+     * Instance
+     *
+     * @return
+     */
+    public static PlayControl getInstance() {
+        if (sPlayControl == null) {
+            sPlayControl = new PlayControl();
+        }
+        return sPlayControl;
+    }
+
+
+    private PlayControl() {
+
+    }
 
     private static native void setVertexSize(float widthRatioForScreen, float heightRationForScreen, float offset, float screenRatio);
 
@@ -49,7 +73,23 @@ public class PlayControl {
      */
     public static native void destroy();
 
-    public static native void setFrameData(byte[] frameData, int size, byte[] frameInfo);
+
+    /**
+     * P2P model ---  set video data to c++ api
+     *
+     * @param videoData
+     * @param size
+     * @param frameInfo
+     */
+    public static native void setFrameVideoData(byte[] videoData, int size, byte[] frameInfo);
+
+    /**
+     * P2P model ---  set audio data to c++ api
+     *  @param audioData
+     * @param ret
+     * @param frameInfo
+     */
+    public static native void setFrameAudioData(byte[] audioData, int ret, byte[] frameInfo);
 
 
     /**
@@ -74,6 +114,7 @@ public class PlayControl {
         this.onErrorListener = onErrorListener;
     }
 
+
     //Jni调用此方法，把结果返回到java层
 
     /**
@@ -86,6 +127,10 @@ public class PlayControl {
         if (onErrorListener != null) {
             onErrorListener.onError(code, msg);
         }
+    }
+
+    public void audioState(boolean openAudio) {
+        Client.setOpenAudio(openAudio);
     }
 
     public interface OnErrorListener {

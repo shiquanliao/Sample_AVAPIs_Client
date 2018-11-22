@@ -100,7 +100,7 @@ bool FFDemux::Open(const char *url) {
                 }
                 //开启子线程，并把WlListener指针传递到子线程中
 
-                m_gFFDemux->SendMessage(110+i, "Test ------------");
+                m_gFFDemux->SendMessage(110 + i, "Test ------------");
 
                 XLOGE("第%d重新连接 FFDemux open %s failed! beacuse: %s", i, url, buff);
             } else {
@@ -113,7 +113,7 @@ bool FFDemux::Open(const char *url) {
             }
         } else {
             XLOGE("FFDemux open %s success!", url);
-            if(isReStarting){
+            if (isReStarting) {
 //                m_gFFDemux->SendMessage(120, "Test ------------");
             }
             break;
@@ -208,7 +208,7 @@ XData FFDemux::Read() {
     return data;
 }
 
-void FFDemux::SetP2PData(u_int8_t *data, int size, int pts) {
+void FFDemux::SetP2PVideoData(u_int8_t *data, int size, int pts) {
     mux.lock();
     XData frameData;
     AVPacket *p2pData = av_packet_alloc();
@@ -221,6 +221,28 @@ void FFDemux::SetP2PData(u_int8_t *data, int size, int pts) {
     frameData.data = reinterpret_cast<unsigned char *>(p2pData);
     frameData.size = size;
     frameData.isAudio = false;
+    mux.unlock();
+    Notify(frameData);
+}
+
+unsigned int temp[1024] = {0};
+
+void FFDemux::SetP2PAudioData(u_int8_t *data, int size, int pts) {
+    mux.lock();
+    XData frameData;
+//    memset(temp, 0, sizeof(temp));
+//    memcpy(temp, data + 7, size - 7);
+    AVPacket *p2pData = av_packet_alloc();
+    av_init_packet(p2pData);
+//    p2pData->data = reinterpret_cast<uint8_t *>(&temp);
+    p2pData->data = data;
+    p2pData->pts = pts;
+    p2pData->dts = pts;
+    p2pData->size = size;
+
+    frameData.data = reinterpret_cast<unsigned char *>(p2pData);
+    frameData.size = size; //随机输入的
+    frameData.isAudio = true;
     mux.unlock();
     Notify(frameData);
 }
@@ -269,20 +291,19 @@ XParameter FFDemux::GetAPara() {
 }
 
 
-
 int FFDemux::AVInterruptCallBackFun(void *ctx) {
     Runner *r = (Runner *) ctx;
     if (r->lasttime > 0) {
 
         //-------------test---------------
-      /*  //执行回调
-        m_gFFDemux->unmber++;
-        if (m_gFFDemux->unmber >1000 && m_gFFDemux->unmber % 30000 == 0) {
-            m_gFFDemux->isReStarting = true;
-            XLOGE(" m_gFFDemux->unmber is %d",m_gFFDemux->unmber);
-            std::thread td(reStart);
-            td.detach();
-        }*/
+        /*  //执行回调
+          m_gFFDemux->unmber++;
+          if (m_gFFDemux->unmber >1000 && m_gFFDemux->unmber % 30000 == 0) {
+              m_gFFDemux->isReStarting = true;
+              XLOGE(" m_gFFDemux->unmber is %d",m_gFFDemux->unmber);
+              std::thread td(reStart);
+              td.detach();
+          }*/
         if (time(NULL) - r->lasttime > 2) {
             // 等待超过2s则中断
             if (m_gFFDemux->isReStarting)
@@ -316,6 +337,8 @@ AVFormatContext *FFDemux::GetAVFormatContext() {
     if (ic) return ic;
     return nullptr;
 }
+
+
 
 
 

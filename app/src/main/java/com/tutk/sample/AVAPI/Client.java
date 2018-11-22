@@ -1,7 +1,8 @@
 package com.tutk.sample.AVAPI;
 
-import android.graphics.YuvImage;
+import android.content.Context;
 import android.os.Bundle;
+import android.os.Environment;
 import android.os.Message;
 import android.util.Log;
 
@@ -9,58 +10,75 @@ import com.common.jniFun.PlayControl;
 import com.tutk.IOTC.IOTCAPIs;
 import com.tutk.IOTC.AVAPIs;
 
+import java.io.BufferedWriter;
+import java.io.DataOutputStream;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.nio.CharBuffer;
+
 public class Client {
     private static final String TAG = "test";
 
-    private static void sendMessage(MainActivity.MyHnadler myHnadler, String content) {
+    private static boolean openAudio = true;
+
+    public static void setOpenAudio(boolean open) {
+        openAudio = open;
+    }
+
+
+    private static void sendMessage(MainActivity.MyHandler myHandler, String content) {
         Bundle data = new Bundle();
         Message message = new Message();
         data.putString(TAG, content);
         message.setData(data);
         message.what = 110;
-        myHnadler.sendMessage(message);
+        myHandler.sendMessage(message);
 
     }
 
-    public static void start(String uid, MainActivity.MyHnadler myHnadler) {
+
+    public static void start(String uid, MainActivity.MyHandler myHandler) {
 
 
         System.out.println("StreamClient start...");
         String str = "你输入的UID是：" + uid + "\n";
-        sendMessage(myHnadler, str + "StreamClient start...\n");
+        sendMessage(myHandler, str + "StreamClient start...\n");
 
         int ret = IOTCAPIs.IOTC_Initialize2(0);
         System.out.printf("IOTC_Initialize() ret = %d\n", ret);
-        sendMessage(myHnadler, "IOTC_Initialize() ret = " +
+        sendMessage(myHandler, "IOTC_Initialize() ret = " +
                 ret + "\n");
 
         if (ret != IOTCAPIs.IOTC_ER_NoERROR) {
             System.out.printf("IOTCAPIs_Device exit...!!\n");
-            sendMessage(myHnadler, "IOTCAPIs_Device exit...!!\n");
+            sendMessage(myHandler, "IOTCAPIs_Device exit...!!\n");
             return;
         }
 
         // alloc 3 sessions for video and two-way audio
-        AVAPIs.avInitialize(3);
+        AVAPIs.avInitialize(4);
 
         int sid = IOTCAPIs.IOTC_Get_SessionID();
         if (sid < 0) {
-            sendMessage(myHnadler, "IOTC_Get_SessionID error code " + sid + "\n");
+            sendMessage(myHandler, "IOTC_Get_SessionID error code " + sid + "\n");
             System.out.printf("IOTC_Get_SessionID error code [%d]\n", sid);
             return;
         }
         ret = IOTCAPIs.IOTC_Connect_ByUID_Parallel(uid, sid);
         System.out.printf("Step 2: call IOTC_Connect_ByUID_Parallel(%s).......\n", uid);
-        sendMessage(myHnadler, "Step 2: call IOTC_Connect_ByUID_Parallel( " + sid + " ).......\n");
+        sendMessage(myHandler, "Step 2: call IOTC_Connect_ByUID_Parallel( " + sid + " ).......\n");
 
         int[] srvType = new int[1];
-        int avIndex = AVAPIs.avClientStart(sid, "admin", "123456", 20000, srvType, 0);
+        int avIndex = AVAPIs.avClientStart(sid, "admin", "cvte123456", 20000, srvType, 0);
         System.out.printf("Step 2: call avClientStart(%d).......\n", avIndex);
-        sendMessage(myHnadler, "Step 2: call avClientStart( " + avIndex + " ).......\n");
+        sendMessage(myHandler, "Step 2: call avClientStart( " + avIndex + " ).......\n");
 
         if (avIndex < 0) {
             System.out.printf("avClientStart failed[%d]\n", avIndex);
-            sendMessage(myHnadler, "avClientStart failed[ " + avIndex + " ].......\n");
+            sendMessage(myHandler, "avClientStart failed[ " + avIndex + " ].......\n");
             return;
         }
 
@@ -71,7 +89,7 @@ public class Client {
                     "Audio Thread");
             videoThread.start();
             audioThread.start();
-            sendMessage(myHnadler, "Client success。。。！\n");
+            sendMessage(myHandler, "Client success。。。！\n");
             try {
                 videoThread.join();
             } catch (InterruptedException e) {
@@ -185,8 +203,13 @@ public class Client {
 
                 // Now the data is ready in videoBuffer[0 ... ret - 1]
                 // Do something here
-                Log.e(TAG, "frameInfo is: "+ String.valueOf(frameInfo) );
-                PlayControl.setFrameData(videoBuffer,outBufSize[0],frameInfo);
+//                Log.e(TAG, "frameInfo is: " + String.valueOf(frameInfo));
+                PlayControl.setFrameVideoData(videoBuffer, outBufSize[0], frameInfo);
+                try {
+                    Thread.sleep(3);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
 
             }
 
@@ -198,6 +221,7 @@ public class Client {
     public static class AudioThread implements Runnable {
         static final int AUDIO_BUF_SIZE = 1024;
         static final int FRAME_INFO_SIZE = 16;
+        public int index = 0;
 
         private int avIndex;
 
@@ -256,10 +280,49 @@ public class Client {
 
                 // Now the data is ready in audioBuffer[0 ... ret - 1]
                 // Do something here
+                if (openAudio) {
+                    Log.e(TAG, "音频 frameInfo size is  " + ret);
+                    PlayControl.setFrameAudioData(audioBuffer, ret, frameInfo);
+
+//                    if (index < 10) {
+//                        writeDataFile("adudio_data" + index, audioBuffer, ret);
+//                        index ++;
+//                    }
+
+                }
+//                try {
+//                    Thread.sleep(50);
+//                } catch (InterruptedException e) {
+//                    e.printStackTrace();
+//                }
             }
 
             System.out.printf("[%s] Exit\n",
                     Thread.currentThread().getName());
         }
+    }
+
+    private static void writeDataFile(String fileName, byte[] data, int len) {
+        DataOutputStream fw = null;
+        try {
+            File newFile = new File(Environment.getExternalStorageDirectory(), fileName);
+            fw = new DataOutputStream(new FileOutputStream(newFile));
+            fw.write(data,0,len);
+
+
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        } finally {
+            if (fw != null) {
+                try {
+                    fw.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+
     }
 }

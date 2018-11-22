@@ -4,19 +4,17 @@ import android.app.Activity;
 import android.media.AudioManager;
 import android.media.MediaPlayer;
 import android.os.Bundle;
+import android.os.Environment;
 import android.os.Handler;
 import android.os.Message;
-import android.view.SurfaceView;
-import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.common.jniFun.MyHandler;
+import com.common.jniFun.CommHandler;
+import com.common.jniFun.PlayControl;
 import com.common.view.XPlay;
-import com.tutk.sample.AVAPI.Client;
-import com.tutk.sample.AVAPI.*;
 
 import java.io.IOException;
 
@@ -26,18 +24,20 @@ public class MainActivity extends Activity {
         System.loadLibrary("native-lib");
     }
 
-    static final String UID = "U4SMNNDT79Y3FF5E111A";
+    static final String UID = "C1KAB554Z3RMHH6GU1Z1";
+//    static final String UID = "C1UA915MRB741HPGY15J";
     private static final String URL = "http://fairee.vicp.net:83/2016rm/0116/baishi160116.mp4";
     private int position;//记录位置
 
-//    static final String UID = "C1KAB554Z3RMHH6GU1Z1";
 
     private XPlay surfaceView;
     private Button mButton;
+    private Button mButtonAudio;
     private EditText text_uid;
     private TextView textView;
-    private MyHnadler myHnadler = null;
+    private MyHandler myHandler = null;
     private MediaPlayer mediaPlayer;
+    private PlayControl mPlayControl;
 
     /**
      * Called when the activity is first created.
@@ -47,31 +47,35 @@ public class MainActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main);
 
-        mButton = (Button) findViewById(R.id.btn_start);
-        text_uid = (EditText) findViewById(R.id.edit_text);
-        textView = (TextView) findViewById(R.id.textView);
+        mPlayControl = PlayControl.getInstance();
 
-        myHnadler = new MyHnadler();
+        mButton = findViewById(R.id.btn_start);
+        mButtonAudio = findViewById(R.id.btn_audio);
+        text_uid = findViewById(R.id.edit_text);
+        textView = findViewById(R.id.textView);
+
+        myHandler = new MyHandler();
         //初始化
         mediaPlayer = new MediaPlayer();
         surfaceView = findViewById(R.id.surfaceView);
-        surfaceView.setUrl("rtsp://admin:cvte123456@172.18.223.100:554/mpeg4/ch1/main/av_stream",new MyHandler());
-        //添加回调接口
-//        surfaceView.getHolder().addCallback(callback);
+//        surfaceView.setUrl("/sdcard/testFFmpeg.mp4",new CommHandler());
+//        surfaceView.setUrl("rtsp://admin:cvte123456@192.168.154.153:554/main",new CommHandler());
+        surfaceView.setUrl("rtsp://admin:cvte123456@172.18.223.100:554/mpeg4/ch1/main/av_stream",new CommHandler());
+//        surfaceView.setP2Pconfig(UID,"admin","cvte123456",new MyHandler());
         mButton.setOnClickListener(view -> {
             textView.setText("");
             (new Thread() {
                 public void run() {
-                    String uid = text_uid.getText().toString().trim();
-//                        Client.start(UID,myHnadler);
-                    Client.start(uid,myHnadler);
+//                    String uid = text_uid.getText().toString().trim();
+//                        Client.start(UID,myHandler);
+                    Client.start(UID, myHandler);
                 }
             }).start();
         });
-
+        mButtonAudio.setOnClickListener(view -> mPlayControl.audioState(true));
     }
 
-    final class MyHnadler extends Handler{
+    final class MyHandler extends CommHandler{
         @Override
         public void handleMessage(Message msg) {
             super.handleMessage(msg);

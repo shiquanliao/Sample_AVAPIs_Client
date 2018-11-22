@@ -9,10 +9,11 @@ package com.tutk.sample.AVAPI;
 
 public final class R {
   public static final class id {
-    public static final int btn_start=0x7f010000;
-    public static final int edit_text=0x7f010001;
-    public static final int surfaceView=0x7f010002;
-    public static final int textView=0x7f010003;
+    public static final int btn_audio=0x7f010000;
+    public static final int btn_start=0x7f010001;
+    public static final int edit_text=0x7f010002;
+    public static final int surfaceView=0x7f010003;
+    public static final int textView=0x7f010004;
   }
   public static final class layout {
     public static final int main=0x7f020000;
@@ -20,5 +21,6 @@ public final class R {
   public static final class string {
     public static final int app_name=0x7f030000;
     public static final int btn_title=0x7f030001;
+    public static final int btn_title_audio=0x7f030002;
   }
 }

@@ -105,32 +105,52 @@ bool IPlayer::Open(int type) {
     }
     //解码 解码可能不需要，如果是解封之后就是原始数据
     if (!vDecode || !vDecode->P2POpen(type)) {
+        mutex.unlock();
         XLOGE("P2P vDecode->open %s failed!");
-        //return false;
+        return false;
     }
-//    if (!aDecode || !aDecode->P2POpen(type)) {
-//        aDecode->isHaveAudio = false;
-//        XLOGE("P2P adecode->open %s failed!");
-//        //return false;
-//    }
+    if (!aDecode || !aDecode->P2POpen(1)) {
+        aDecode->isHaveAudio = false;
+        mutex.unlock();
+        XLOGE("P2P adecode->open %s failed!");
+        return false;
+    }
+    //重采样 有可能不需要，解码后或者解封后可能是直接能播放的数据
+    if (aDecode->isHaveAudio) { // 有音频
+        outPara.channels = 2; //设备不支持单通道
+        if (!resample || !resample->Open(XParameter(), outPara)) {
+            XLOGE("resample->open failed!");
+        }
+    }
     mutex.unlock();
     return true;
+}
+
+void IPlayer::StartAudioPlay() {
+
+    mutex.lock();
+    if (audioPlay && demux && demux->isP2P)
+        audioPlay->StartPlay(outPara);
+    mutex.unlock();
 }
 
 bool IPlayer::Start() {
 
     mutex.lock();
 
-    if (audioPlay)
+    if (audioPlay && demux && !demux->isP2P)
         audioPlay->StartPlay(outPara);
+
     if (vDecode)
         vDecode->Start();
 
-//    if (aDecode)
-//        aDecode->Start();
-
     if (demux && !demux->isP2P)
         demux->Start();
+
+    if (aDecode)
+        aDecode->Start();
+
+
 
     XThread::Start();
     mutex.unlock();
@@ -278,9 +298,15 @@ void IPlayer::SendMsgToJava(int code, const char *msg) {
     mutex.unlock();
 }
 
-void IPlayer::setDemuxData(u_int8_t *data, int size, int pts) {
-    demux->SetP2PData(data, size, pts);
+void IPlayer::setDemuxVideoData(u_int8_t *data, int size, unsigned int pts) {
+    demux->SetP2PVideoData(data, size, pts);
 }
+
+void IPlayer::setDemuxAudioData(u_int8_t *data, int size, unsigned int pts) {
+    demux->SetP2PAudioData(data, size, pts);
+}
+
+
 
 
 

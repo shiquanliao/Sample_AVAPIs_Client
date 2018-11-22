@@ -1,4 +1,4 @@
-#Tue Nov 20 16:22:36 CST 2018
+#Thu Nov 22 18:48:57 CST 2018
 path.3=classes.dex
 path.2=classes.dex
 path.1=classes.dex
@@ -7,7 +7,7 @@ renamed.3=classes4.dex
 renamed.2=classes3.dex
 renamed.1=classes2.dex
 renamed.0=classes.dex
-base.3=/Users/cvte/Desktop/FFMpegLearn/Sample_AVAPIs_Client/app/build/intermediates/transforms/dexMerger/debug/32
-base.2=/Users/cvte/Desktop/FFMpegLearn/Sample_AVAPIs_Client/app/build/intermediates/transforms/dexMerger/debug/29
-base.1=/Users/cvte/Desktop/FFMpegLearn/Sample_AVAPIs_Client/app/build/intermediates/transforms/dexMerger/debug/30
-base.0=/Users/cvte/Desktop/FFMpegLearn/Sample_AVAPIs_Client/app/build/intermediates/transforms/dexMerger/debug/31
+base.3=/Users/cvte/Desktop/FFMpegLearn/Sample_AVAPIs_Client/app/build/intermediates/transforms/dexMerger/debug/15
+base.2=/Users/cvte/Desktop/FFMpegLearn/Sample_AVAPIs_Client/app/build/intermediates/transforms/dexMerger/debug/13
+base.1=/Users/cvte/Desktop/FFMpegLearn/Sample_AVAPIs_Client/app/build/intermediates/transforms/dexMerger/debug/14
+base.0=/Users/cvte/Desktop/FFMpegLearn/Sample_AVAPIs_Client/app/build/intermediates/transforms/dexMerger/debug/12

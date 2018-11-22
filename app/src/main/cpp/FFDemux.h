@@ -57,7 +57,9 @@ public:
 
     static void reStart();
 
-    void SetP2PData(u_int8_t *data, int size, int pts) override;
+    void SetP2PVideoData(u_int8_t *data, int size, int pts) override;
+
+    void SetP2PAudioData(u_int8_t *data, int size, int pts) override;
 
 
 private:

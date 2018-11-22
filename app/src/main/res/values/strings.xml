@@ -2,4 +2,5 @@
 <resources>
     <string name="app_name">AvApiSampleClient</string>
     <string name="btn_title">开始连接TUTK设备</string>
+    <string name="btn_title_audio">打开audio</string>
 </resources>

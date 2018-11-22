@@ -21,7 +21,7 @@ void IPlayProxy::Init(void *vm) {
 }
 
 void IPlayProxy::restartDemux() {
-    if (player){
+    if (player) {
         player->restartDemux();
     }
 }
@@ -79,10 +79,12 @@ void IPlayProxy::Destroy() {
     mutex.unlock();
 }
 
-void IPlayProxy::SetShaderVertex(float widthRatioForScreen, float heightRationForScreen, float offset, float screenRatio) {
+void
+IPlayProxy::SetShaderVertex(float widthRatioForScreen, float heightRationForScreen, float offset,
+                            float screenRatio) {
     mutex.lock();
     if (player)
-        player->SetShaderVertex(widthRatioForScreen, heightRationForScreen,offset, screenRatio);
+        player->SetShaderVertex(widthRatioForScreen, heightRationForScreen, offset, screenRatio);
     mutex.unlock();
 }
 
@@ -110,10 +112,24 @@ bool IPlayProxy::Open(int type) {
     return state;
 }
 
-void IPlayProxy::setDemuxData(u_int8_t *data, int size, int pts) {
+void IPlayProxy::setDemuxVideoData(u_int8_t *data, int size, unsigned int pts) {
     mutex.lock();
     if (player)
-        player->setDemuxData(data, size, pts);
+        player->setDemuxVideoData(data, size, pts);
+    mutex.unlock();
+}
+
+void IPlayProxy::setDemuxAudioData(u_int8_t *data, int size, unsigned int pts) {
+    mutex.lock();
+    if (player)
+        player->setDemuxAudioData(data, size, pts);
+    mutex.unlock();
+}
+
+void IPlayProxy::StartAudioPlay() {
+    mutex.lock();
+    if (player)
+        player->StartAudioPlay();
     mutex.unlock();
 }
 

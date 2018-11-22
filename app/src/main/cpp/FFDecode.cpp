@@ -28,7 +28,7 @@ bool FFDecode::P2POpen(int i) {
     if (i == 0) {
         type = AV_CODEC_ID_H264;
     } else {
-//        type = ....;
+        type = AV_CODEC_ID_AAC;
     }
     AVCodec *cd = avcodec_find_decoder(type);
     if (!cd) {
@@ -136,9 +136,10 @@ bool FFDecode::SendPacket(XData pkt) {
     int re = avcodec_send_packet(codec, (AVPacket *) pkt.data);
     mux.unlock();
     if (re != 0) {
-        XLOGE("decode msg:[%s].", av_err2str(re));
+        XLOGE("decode msg:[re is %d, --  %s].", re, av_err2str(re));
         return false;
     }
+//    XLOGE("avcodec_send_packet  success!!!!!!");
     return true;
 }
 
@@ -159,7 +160,7 @@ XData FFDecode::RecvFrame() {
     int re = avcodec_receive_frame(codec, frame);
     if (re != 0) {
         mux.unlock();
-        XLOGE("avcodec_receive_frame failed because : %s", av_err2str(re));
+//        XLOGE("avcodec_receive_frame failed because : %s", av_err2str(re));
         return XData();
     }
     XData d;
@@ -183,6 +184,7 @@ XData FFDecode::RecvFrame() {
 
     pts = d.pts;
     mux.unlock();
+//    XLOGE("avcodec_receive_frame  success!!!!!!");
     return d;
 }
 

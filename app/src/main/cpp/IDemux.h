@@ -31,8 +31,11 @@ public:
     //读取一帧数据，数据由调用者清理
     virtual XData Read() = 0;
 
-    //读取一帧数据，数据由调用者清理
-    virtual void SetP2PData(u_int8_t *data, int size, int pts) = 0;
+    //读取P2P一帧视频数据
+    virtual void SetP2PVideoData(u_int8_t *data, int size, int pts) = 0;
+
+    //读取P2P一帧音频数据
+    virtual void SetP2PAudioData(u_int8_t *data, int size, int pts) = 0;
 
 
     //总时长（毫秒）
