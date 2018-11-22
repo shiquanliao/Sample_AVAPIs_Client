@@ -5,6 +5,7 @@
     android:background="#FFF"
     android:orientation="vertical">
 
+
     <com.common.view.XPlay
         android:id="@+id/surfaceView"
         android:visibility="visible"
