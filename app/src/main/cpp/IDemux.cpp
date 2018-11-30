@@ -5,7 +5,6 @@
 #include "IDemux.h"
 #include "XLog.h"
 bool IDemux::isReStarting = false;
-bool IDemux::isP2P = false;
 void IDemux::Main() {
     while (!isExit ) {
         if (isReStarting){
@@ -25,6 +24,11 @@ void IDemux::Main() {
 
 void IDemux::Update(XData data) {
     IObserver::Update(data);
+}
+
+bool IDemux::P2POpen() {
+    isP2P = true;
+    return true;
 }
 
 

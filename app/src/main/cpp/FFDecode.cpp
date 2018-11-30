@@ -17,11 +17,45 @@ extern "C"
 }
 
 
+void make_dsi(unsigned int sampling_frequency_index, unsigned int channel_configuration,
+              unsigned char *dsi) {
+    unsigned int object_type = 2; // AAC LC by default
+    dsi[0] = static_cast<unsigned char>((object_type << 3) | (sampling_frequency_index >> 1));
+    dsi[1] = static_cast<unsigned char>(((sampling_frequency_index & 1) << 7) | (channel_configuration << 3));
+
+}
+
+int get_sr_index(unsigned int sampling_frequency) {
+    switch (sampling_frequency) {
+        case 96000:
+            return 0;
+        case 88200:
+            return 1;
+        case 64000:
+            return 2;
+        case 48000:
+            return 3;
+        case 44100:
+            return 4;
+        case 32000:
+            return 5;
+        case 24000:
+            return 6;
+        case 8000:
+            return 11;
+        default:
+            return 0;
+    }
+}
+
+
+
 void FFDecode::InitHard(void *vm) {
     av_jni_set_java_vm(vm, 0);
 }
 
 bool FFDecode::P2POpen(int i) {
+
     Close();
     //1 查找解码器
     AVCodecID type;
@@ -39,7 +73,14 @@ bool FFDecode::P2POpen(int i) {
     //2 创建解码上下文
     codec = avcodec_alloc_context3(cd);
     codec->thread_count = 8;
-    //3 打开解码器
+
+//    unsigned char dsi[2];
+//    make_dsi((unsigned int) get_sr_index((unsigned int) 8000), (unsigned int) 1, dsi);
+//    codec->extradata = (uint8_t *) dsi;
+//    codec->extradata_size = 2;
+
+
+            //3 打开解码器
     int re = avcodec_open2(codec, 0, 0);
     if (re != 0) {
         mux.unlock();
@@ -98,7 +139,7 @@ bool FFDecode::Open(XParameter para, bool isHard) {
     }
 
     mux.unlock();
-    XLOGI("avcodec_open2 success");
+    XLOGE("avcodec_open2 success");
     return true;
 }
 
@@ -169,14 +210,18 @@ XData FFDecode::RecvFrame() {
         d.size = (frame->linesize[0] + frame->linesize[1] + frame->linesize[2]) * frame->height;
         d.width = frame->width;
         d.height = frame->height;
+        d.isAudio = false;
         DataCopy(frame);
         memcpy(d.datas, pFrameYUV->data, sizeof(d.datas));
+//        XLOGE("视频解码数据pts:  %d",(int)frame->pts);
     } else {
         //样本字节数 * 单通道样本数 * 通道数
         d.size = av_get_bytes_per_sample((AVSampleFormat) frame->format) * frame->nb_samples *
                  frame->channel_layout;
+        d.isAudio = true;
         memcpy(d.datas, frame->data, sizeof(d.datas));
-        //XLOGE("音频解码数据pts:  ",frame->pts);
+//        XLOGE("音频解码数据pts:  %d",(int)frame->pts);
+
     }
     d.format = frame->format;
 

@@ -12,9 +12,6 @@
 extern "C"
 {
 #include <libavformat/avformat.h>
-//#include<libavutil/mathematics.h>
-//#include<libavutil/time.h>
-
 }
 
 //分数转为浮点数
@@ -25,15 +22,6 @@ static double r2d(AVRational r) {
 
 static char rtspUrl[256] = {0};
 
-bool FFDemux::P2POpen() {
-    mutex.lock();
-
-    this->isP2P = true;
-
-
-    mutex.unlock();
-    return true;
-}
 
 //打开文件，或者流媒体 rmtp http rtsp
 bool FFDemux::Open(const char *url) {
@@ -163,7 +151,6 @@ XData FFDemux::Read() {
     AVPacket *pkt = av_packet_alloc();
     // 调用之前初始化时间
     input_runner.lasttime = time(NULL);
-//    XSleep(3);
     int re = av_read_frame(ic, pkt);
     if (re != 0) { // 读取帧失败
         av_packet_free(&pkt);
@@ -176,6 +163,10 @@ XData FFDemux::Read() {
     data.size = pkt->size;
     if (pkt->stream_index == AVMEDIA_TYPE_AUDIO) {
         data.isAudio = true;
+        FILE *f = fopen("/sdcard/audiodata.aac", "a+b");
+        fwrite(pkt->data, 1, pkt->size, f);
+        fclose(f);
+//        XLOGE("aac ------- success = %d", pkt->size);
     } else if (pkt->stream_index == AVMEDIA_TYPE_VIDEO) {
         data.isAudio = false;
     } else { //销毁数据, 防止内存泄漏
@@ -225,16 +216,12 @@ void FFDemux::SetP2PVideoData(u_int8_t *data, int size, int pts) {
     Notify(frameData);
 }
 
-unsigned int temp[1024] = {0};
 
 void FFDemux::SetP2PAudioData(u_int8_t *data, int size, int pts) {
     mux.lock();
     XData frameData;
-//    memset(temp, 0, sizeof(temp));
-//    memcpy(temp, data + 7, size - 7);
     AVPacket *p2pData = av_packet_alloc();
     av_init_packet(p2pData);
-//    p2pData->data = reinterpret_cast<uint8_t *>(&temp);
     p2pData->data = data;
     p2pData->pts = pts;
     p2pData->dts = pts;
@@ -243,6 +230,8 @@ void FFDemux::SetP2PAudioData(u_int8_t *data, int size, int pts) {
     frameData.data = reinterpret_cast<unsigned char *>(p2pData);
     frameData.size = size; //随机输入的
     frameData.isAudio = true;
+
+
     mux.unlock();
     Notify(frameData);
 }

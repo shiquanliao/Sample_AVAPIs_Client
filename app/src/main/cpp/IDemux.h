@@ -23,7 +23,7 @@ public:
 
     //获取视频参数
     virtual XParameter GetVPara() = 0;
-    virtual bool P2POpen() = 0;
+    bool P2POpen();
 
     //获取音频参数
     virtual XParameter GetAPara() = 0;
@@ -44,7 +44,7 @@ public:
     //判断当前是否需要通知推流对象
     bool isStopPush = true;
 
-    static bool isP2P;
+    bool isP2P = false;
 
 protected:
     virtual void Main() override;
@@ -54,7 +54,6 @@ protected:
     static bool isReStarting;
 
 
-//    XData pushStreamData = {0};
 };
 
 

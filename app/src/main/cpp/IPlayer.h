@@ -37,7 +37,7 @@ public:
 
     virtual bool Open(const char *path);
 
-    virtual bool Open(int type);
+    virtual bool Open(XParameter para);
 
     virtual void Close();
 

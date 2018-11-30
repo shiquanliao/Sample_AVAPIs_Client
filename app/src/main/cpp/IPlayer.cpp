@@ -97,49 +97,65 @@ bool IPlayer::Open(const char *path) {
     return true;
 }
 
-bool IPlayer::Open(int type) {
+bool IPlayer::Open(XParameter para) {
     Close();
     mutex.lock();
     if (!demux || !demux->P2POpen()) {
         XLOGE("P2P demux->open %s failed!");
     }
     //解码 解码可能不需要，如果是解封之后就是原始数据
-    if (!vDecode || !vDecode->P2POpen(type)) {
+    if (!vDecode || !vDecode->P2POpen(0)) {
         mutex.unlock();
         XLOGE("P2P vDecode->open %s failed!");
-        return false;
+//        return false;
     }
-    if (!aDecode || !aDecode->P2POpen(1)) {
+//    if (!aDecode || !aDecode->P2POpen(1)) {
+//        aDecode->isHaveAudio = false;
+//        mutex.unlock();
+//        XLOGE("P2P adecode->open %s failed!");
+//        return false;
+//    }
+//    //重采样 有可能不需要，解码后或者解封后可能是直接能播放的数据
+//    if (aDecode->isHaveAudio) { // 有音频
+//        outPara.channels = 2; //设备不支持单通道
+//        if (!resample || !resample->Open(XParameter(), outPara)) {
+//            XLOGE("resample->open failed!");
+//        }
+//    }
+
+    if (!aDecode || !aDecode->Open(para)) {
         aDecode->isHaveAudio = false;
-        mutex.unlock();
-        XLOGE("P2P adecode->open %s failed!");
-        return false;
+//        XLOGE("adecode->open %s failed!");
+        //return false;
     }
     //重采样 有可能不需要，解码后或者解封后可能是直接能播放的数据
+    //if (outPara.sample_rate <= 0)
     if (aDecode->isHaveAudio) { // 有音频
+        outPara = para;
         outPara.channels = 2; //设备不支持单通道
-        if (!resample || !resample->Open(XParameter(), outPara)) {
-            XLOGE("resample->open failed!");
+        if (!resample || !resample->Open(para, outPara)) {
+            XLOGE("resample->open %s failed!");
         }
     }
+
+
     mutex.unlock();
     return true;
 }
 
 void IPlayer::StartAudioPlay() {
-
-    mutex.lock();
-    if (audioPlay && demux && demux->isP2P)
-        audioPlay->StartPlay(outPara);
-    mutex.unlock();
+//
+//    mutex.lock();
+//    if (audioPlay && demux && demux->isP2P)
+//        audioPlay->StartPlay(outPara);
+//    mutex.unlock();
 }
 
 bool IPlayer::Start() {
 
     mutex.lock();
 
-    if (audioPlay && demux && !demux->isP2P)
-        audioPlay->StartPlay(outPara);
+
 
     if (vDecode)
         vDecode->Start();
@@ -150,6 +166,9 @@ bool IPlayer::Start() {
     if (aDecode)
         aDecode->Start();
 
+    if (audioPlay)
+        audioPlay->StartPlay(outPara);
+
 
 
     XThread::Start();
@@ -159,12 +178,10 @@ bool IPlayer::Start() {
 
 
 void IPlayer::InitView(void *win) {
-    mutex.lock();
     if (videoView) {
         videoView->Close();
         videoView->SetRender(win);
     }
-    mutex.unlock();
 }
 
 void IPlayer::Main() {
@@ -183,7 +200,7 @@ void IPlayer::Main() {
         vDecode->synPts = apts;
 
         mutex.unlock();
-        XSleep(200);
+        XSleep(2);
     }
 }
 

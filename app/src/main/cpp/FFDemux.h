@@ -40,8 +40,6 @@ public:
     //获取视频参数
     virtual XParameter GetVPara() override;
 
-    //获取视频参数
-    virtual bool P2POpen() override;
 
     //获取音频参数
     XParameter GetAPara() override;

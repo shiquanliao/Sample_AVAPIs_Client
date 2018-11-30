@@ -22,7 +22,7 @@ public:
 
     bool Open(const char *path) override;
 
-    bool Open(int type) override;
+    bool Open(XParameter para) override;
 
     void InitView(void *win) override;
 

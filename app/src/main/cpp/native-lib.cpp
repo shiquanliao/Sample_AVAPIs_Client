@@ -6,6 +6,11 @@
 #include "XLog.h"
 #include <android/native_window_jni.h>
 
+extern "C"
+{
+#include <libavformat/avformat.h>
+}
+
 JavaVM *jvm;
 
 extern "C"
@@ -140,16 +145,17 @@ Java_com_common_view_XPlay_OpenP2P(JNIEnv *env, jobject instance, jstring uid_, 
     const char *name = env->GetStringUTFChars(name_, 0);
     const char *password = env->GetStringUTFChars(password_, 0);
 
-    bool status;
-    status = IPlayProxy::Get()->Open(0);
-    if (status) { // 打开视频流正常才会使用
-        IPlayProxy::Get()->Start();
-    }
+//    bool status;
+//    status = IPlayProxy::Get()->Open(0);
+//    if (status) { // 打开视频流正常才会使用
+//        IPlayProxy::Get()->Start();
+//    }
 
     env->ReleaseStringUTFChars(uid_, uid);
     env->ReleaseStringUTFChars(name_, name);
     env->ReleaseStringUTFChars(password_, password);
-    return static_cast<jboolean>(status);
+
+    return static_cast<jboolean>(true);
 }
 
 
@@ -188,17 +194,72 @@ Java_com_common_jniFun_PlayControl_setFrameAudioData(JNIEnv *env, jclass type,
     FRAMEINFO_t *info = reinterpret_cast<FRAMEINFO_t *>(frameInfo);
 
 
+    char *temp = const_cast<char *>("/sdcard/audiodata.aac");
+//    if (number < 10) {
+//        number++;
+//        FILE *f = fopen(temp, "a+b");
+//        fwrite(audioBuffer, 1, ret, f);
+//        fclose(f);
+//        XLOGE("aac ------- success = %d", ret);
+//        return;
+//    }
+
+    if (first) {
+        first = false;
+
+        FILE *f = fopen(temp, "w+b");
+        fwrite(audioBuffer, 1, ret, f);
+        fclose(f);
+        XLOGE("aac ------- success = %d", ret);
+
+        AVFormatContext *avic = avformat_alloc_context();
+        int re = 0;
+        re = avformat_open_input(&avic, "/sdcard/audiodata.aac", 0, 0);
+
+        if (re != 0) {
+            char buff[1024] = {0};
+            av_strerror(re, buff, sizeof(buff));
+            XLOGE("FFDemux open %s failed! beacuse: %s", temp, buff);
+            return;
+        }
+        //读取文件信息
+        re = avformat_find_stream_info(avic, 0);
+        if (re != 0) {
+            char buff[1024] = {0};
+            av_strerror(re, buff, sizeof(buff));
+            XLOGE("avformat_find_stream_info %s failed!", temp);
+            return;
+        }
+        //获取了音频流索引
+        re = av_find_best_stream(avic, AVMEDIA_TYPE_AUDIO, -1, -1, 0, 0);
+        if (re < 0) {
+            XLOGE("av_find_best_stream failed!");
+            return;
+        }
+        XParameter para;
+        para.para = avic->streams[re]->codecpar;
+        para.channels = avic->streams[re]->codecpar->channels;
+        para.sample_rate = avic->streams[re]->codecpar->sample_rate;
+
+
+        bool status;
+        status = IPlayProxy::Get()->Open(para);
+        if (status) { // 打开视频流正常才会使用
+            IPlayProxy::Get()->Start();
+        }
+//        IPlayProxy::Get()->StartAudioPlay();
+        avformat_close_input(&avic);
+
+    }
+
+
     IPlayProxy::Get()->setDemuxAudioData(reinterpret_cast<u_int8_t *>(audioBuffer), ret,
                                          info->timestamp);
-
-    if (first && number > 10) {
-        first = false;
-        IPlayProxy::Get()->StartAudioPlay();
-    } else {
-        number++;
-    }
 
 
     env->ReleaseByteArrayElements(audioData_, audioBuffer, 0);
     env->ReleaseByteArrayElements(frameInfo_, frameInfo, 0);
 }
+
+
+

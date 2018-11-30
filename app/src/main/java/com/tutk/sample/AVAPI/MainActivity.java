@@ -58,16 +58,22 @@ public class MainActivity extends Activity {
         //初始化
         mediaPlayer = new MediaPlayer();
         surfaceView = findViewById(R.id.surfaceView);
+
+        surfaceView.setP2Pconfig(UID,"admin","cvte123456",new MyHandler());
+        (new Thread() {
+            public void run() {
+                Client.start(UID, myHandler);
+            }
+        }).start();
+
+//        surfaceView.setUrl("rtsp://admin:cvte123456@192.168.154.150:554/main",new CommHandler());
+
 //        surfaceView.setUrl("/sdcard/testFFmpeg.mp4",new CommHandler());
-//        surfaceView.setUrl("rtsp://admin:cvte123456@192.168.154.153:554/main",new CommHandler());
-        surfaceView.setUrl("rtsp://admin:cvte123456@172.18.223.100:554/mpeg4/ch1/main/av_stream",new CommHandler());
-//        surfaceView.setP2Pconfig(UID,"admin","cvte123456",new MyHandler());
+//        surfaceView.setUrl("rtsp://admin:cvte123456@172.18.223.100:554/mpeg4/ch1/main/av_stream",new CommHandler());
         mButton.setOnClickListener(view -> {
             textView.setText("");
             (new Thread() {
                 public void run() {
-//                    String uid = text_uid.getText().toString().trim();
-//                        Client.start(UID,myHandler);
                     Client.start(UID, myHandler);
                 }
             }).start();

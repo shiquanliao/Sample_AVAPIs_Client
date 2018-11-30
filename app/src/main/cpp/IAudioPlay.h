@@ -25,8 +25,9 @@ public:
     virtual void Clear();
 
     //最大缓冲
-    int maxFrame = 100;
+    int maxFrame = 500;
     int pts = 0;
+    bool isFirst = true;
 protected:
     std::list<XData> frames;
     std::mutex framesMutex;

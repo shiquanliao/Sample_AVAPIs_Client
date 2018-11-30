@@ -35,6 +35,16 @@ bool IPlayProxy::Open(const char *path) {
     return re;
 }
 
+
+bool IPlayProxy::Open(XParameter para) {
+    mutex.lock();
+    bool state = false;
+    if (player)
+        state = player->Open(para);
+    mutex.unlock();
+    return state;
+}
+
 bool IPlayProxy::Start() {
     bool re = false;
     mutex.lock();
@@ -103,14 +113,6 @@ void IPlayProxy::SendMsgToJava(int code, const char *msg) {
 }
 
 
-bool IPlayProxy::Open(int type) {
-    mutex.lock();
-    bool state = false;
-    if (player)
-        state = player->Open(type);
-    mutex.unlock();
-    return state;
-}
 
 void IPlayProxy::setDemuxVideoData(u_int8_t *data, int size, unsigned int pts) {
     mutex.lock();

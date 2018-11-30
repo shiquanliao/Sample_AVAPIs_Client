@@ -1,4 +1,0 @@
-#Thu Nov 22 18:46:33 CST 2018
-base.0=/Users/cvte/Desktop/FFMpegLearn/Sample_AVAPIs_Client/app/build/intermediates/transforms/dexMerger/debug/5
-path.0=classes.dex
-renamed.0=classes.dex

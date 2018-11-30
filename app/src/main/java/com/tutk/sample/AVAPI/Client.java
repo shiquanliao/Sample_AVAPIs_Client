@@ -247,7 +247,7 @@ public class Client {
                     break;
                 } else if (ret < 3) {
                     try {
-                        Thread.sleep(120);
+                        Thread.sleep(10);
                         continue;
                     } catch (InterruptedException e) {
                         System.out.println(e.getMessage());
@@ -280,8 +280,8 @@ public class Client {
 
                 // Now the data is ready in audioBuffer[0 ... ret - 1]
                 // Do something here
-                if (openAudio) {
-                    Log.e(TAG, "音频 frameInfo size is  " + ret);
+                if (openAudio && ret > 0) {
+//                    Log.e(TAG, "音频 frameInfo size is  " + ret);
                     PlayControl.setFrameAudioData(audioBuffer, ret, frameInfo);
 
 //                    if (index < 10) {
@@ -290,11 +290,7 @@ public class Client {
 //                    }
 
                 }
-//                try {
-//                    Thread.sleep(50);
-//                } catch (InterruptedException e) {
-//                    e.printStackTrace();
-//                }
+//
             }
 
             System.out.printf("[%s] Exit\n",
@@ -307,7 +303,7 @@ public class Client {
         try {
             File newFile = new File(Environment.getExternalStorageDirectory(), fileName);
             fw = new DataOutputStream(new FileOutputStream(newFile));
-            fw.write(data,0,len);
+            fw.write(data, 0, len);
 
 
         } catch (FileNotFoundException e) {
